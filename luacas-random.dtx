@@ -1,0 +1,116 @@
+% \iffalse meta-comment
+%
+% File: luacas-random.dtx
+% Copyright (C) 2026 by NYU Math Clinic
+%
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[T1]{fontenc}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{luacas-random.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \iffalse
+%<*installer>
+\input docstrip.tex
+\keepsilent
+
+\usedir{tex/latex/luacas-random}
+\generate{\file{luacas-random.sty}{\from{luacas-random.dtx}{package}}}
+
+\usedir{scripts/luacas-random}
+\generate{\file{luacas-randominteger.lua}{\from{luacas-random.dtx}{lua}}}
+
+\endbatchfile
+%</installer>
+% \fi
+%
+% \GetFileInfo{luacas-random.sty}
+%
+% \title{The \textsf{luacas-random} package\thanks{This document
+%   corresponds to \textsf{luacas-random}~\fileversion,
+%   dated~\filedate.}}
+% \author{NYU Math Clinic}
+% \date{\today}
+% \maketitle
+%
+% \begin{abstract}
+%   The \textsf{luacas-random} package extends the \textsf{luacas}
+%   computer algebra system with pseudo-random number generation by
+%   adding a |random| method to the |Integer| class.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \section{Introduction}
+%
+% The \textsf{luacas-random} package extends the \textsf{luacas}
+% computer algebra system with pseudo-random number generation.
+% It adds a |random| method to the |Integer| class.
+% The package requires \LuaLaTeX.
+%
+% \section{Usage}
+%
+% Load the package in your preamble:
+% \begin{verbatim}
+%   \usepackage{luacas-random}
+% \end{verbatim}
+%
+% The package provides no additional \LaTeX{} commands.  Random integers
+% are available in Lua code via |Integer.random|.
+%
+% \section{Implementation}
+%
+% \subsection{Lua module: \texttt{luacas-randominteger.lua}}
+%
+% Extends the \textsf{luacas} |Integer| class with a |random| method.
+% Called with two arguments |x| and |y|, it returns a random |Integer|
+% in the range $[x, y]$.  Called with a single argument |x|, it returns
+% a random |Integer| in the range $[1, x]$.
+%
+%<*lua>
+-- luacas-randominteger.lua
+-- Extends the luacas Integer class with random number generation.
+
+--- Returns a random Integer.
+-- With two arguments returns a random Integer in [x, y].
+-- With one argument returns a random Integer in [1, x].
+-- @param x  Integer lower bound (or upper bound when y is nil)
+-- @param y  Integer upper bound (optional)
+-- @return   Integer
+function Integer.random(x,y)
+    if y ~= nil then
+        return Integer(math.random(x:asnumber(), y:asnumber()))
+    else
+        return Integer(math.random(x:asnumber()))
+    end
+end
+%</lua>
+%
+% \subsection{\LaTeX{} package: \texttt{luacas-random.sty}}
+%
+% Loads \textsf{luacas} and the Lua module.  No \LaTeX{} commands are
+% defined; random integers are used directly in Lua code.
+%
+%<*package>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{luacas-random}
+  [2026/03/03 v0.1 Random features for luacas]
+
+\RequirePackage{luacas}
+\directlua{require("luacas-randominteger")}
+%</package>
