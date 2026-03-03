@@ -151,10 +151,27 @@ and the derived files           luacas-random.ins,
 %
 % The package provides no additional \LaTeX{} commands.  Random integers
 % are available in Lua code via |Integer.random|.
+% 
+% For example:
+% \begin{verbatim}
+%   \begin{CAS}
+%     a = Integer.random(10)
+%     b = Integer.random(10,99)
+%   \end{CAS}
+%   Here is a random number between 1 and 10: \print{a}.
+%   Here is a random number between 10 and 99: \print{b}.
+% \end{verbatim}
+% The result of this code is: 
+% \begin{CAS}
+%   a = Integer.random(10)
+%   b = Integer.random(10,99)
+% \end{CAS}
+% Here is a random number between 1 and 10: \print{a}.
+% Here is a random number between 10 and 99: \print{b}.
 %
 % \section{Implementation}
 %
-% \subsection{Lua module: \texttt{luacas-randominteger.lua}}
+% \subsection{Lua module}
 %
 % Extends the \textsf{luacas} |Integer| class with a |random| method.
 % Called with two arguments |x| and |y|, it returns a random |Integer|
@@ -163,9 +180,6 @@ and the derived files           luacas-random.ins,
 %
 %    \begin{macrocode}
 %<*lua>
--- luacas-randominteger.lua
--- Extends the luacas Integer class with random number generation.
-
 --- Returns a random Integer.
 -- With two arguments returns a random Integer in [x, y].
 -- With one argument returns a random Integer in [1, x].
@@ -182,7 +196,7 @@ end
 %</lua>
 %    \end{macrocode}
 %
-% \subsection{\LaTeX{} package: \texttt{luacas-random.sty}}
+% \subsection{\LaTeX{} package}
 %
 % Loads \textsf{luacas} and the Lua module.  No \LaTeX{} commands are
 % defined; random integers are used directly in Lua code.
