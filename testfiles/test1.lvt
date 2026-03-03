@@ -1,0 +1,13 @@
+\input{regression-test.tex}
+\documentclass{article}
+\usepackage{luacas-random}
+\directlua{math.randomseed(20260303)}
+\begin{document}
+\begin{CAS}
+ a = Integer.random(10)
+\end{CAS}
+\START
+\directlua{texio.write_nl("log", "a=" .. tostring(a:asnumber()))}
+\END
+\end{document}
+ 

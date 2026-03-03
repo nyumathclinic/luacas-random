@@ -1,52 +1,130 @@
 % \iffalse meta-comment
-%
-% File: luacas-random.dtx
-% Copyright (C) 2026 by NYU Math Clinic
-%
-% This file may be distributed and/or modified under the
-% conditions of the LaTeX Project Public License, either version 1.3
-% of this license or (at your option) any later version.
-%
-% \fi
-%
-% \iffalse
+%<*internal>
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+luacas-random --- Random features for luacas
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+\endpreamble
+\postamble
+
+Copyright (C) 2026 by Matthew Leingang
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+Matthew Leingang.
+
+This work consists of the file  luacas-random.dtx
+and the derived files           luacas-random.ins,
+                                luacas-random.pdf,
+                                luacas-random.sty and
+                                luacas-random.lua.
+
+\endpostamble
+\usedir{tex/lualatex/luacas-random}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+\def\MetaPrefix{--}
+%:FIXME: DRY this out so we're not re-declaring the preamble and postamble.
+\preamble
+----------------------------------------------------------------
+luacas-random --- Random features for luacas
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+\endpreamble
+\postamble
+
+Copyright (C) 2026 by Matthew Leingang
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+Matthew Leingang.
+
+This work consists of the file  luacas-random.dtx
+and the derived files           luacas-random.ins,
+                                luacas-random.pdf,
+                                luacas-random.sty and
+                                luacas-random.lua.
+
+\endpostamble
+\generate{
+  \file{\jobname.lua}{\from{\jobname.dtx}{lua}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/luacas-random}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/luacas-random}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+%<*package>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{luacas-random}
+  [2026/03/03 v0.1 Random features for luacas]
+%</package>
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage[T1]{fontenc}
+\usepackage{hologo}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
 \begin{document}
-  \DocInput{luacas-random.dtx}
+  \DocInput{\jobname.dtx}
   \PrintChanges
   \PrintIndex
 \end{document}
 %</driver>
 % \fi
 %
-% \iffalse
-%<*installer>
-\input docstrip.tex
-\keepsilent
-
-\usedir{tex/latex/luacas-random}
-\generate{\file{luacas-random.sty}{\from{luacas-random.dtx}{package}}}
-
-\usedir{scripts/luacas-random}
-\generate{\file{luacas-randominteger.lua}{\from{luacas-random.dtx}{lua}}}
-
-\endbatchfile
-%</installer>
-% \fi
+%\GetFileInfo{\jobname.sty}
 %
-% \GetFileInfo{luacas-random.sty}
+%\title{^^A
+%  \textsf{luacas-random} --- Random features for luacas\thanks{^^A
+%    This file describes version \fileversion, last revised \filedate.^^A
+%  }^^A
+%}
+%\author{^^A
+%  Matthew Leingang^^A
+%}
+%\date{Released \filedate}
 %
-% \title{The \textsf{luacas-random} package\thanks{This document
-%   corresponds to \textsf{luacas-random}~\fileversion,
-%   dated~\filedate.}}
-% \author{NYU Math Clinic}
-% \date{\today}
-% \maketitle
+%\maketitle
+%
+%\changes{v0.1}{2026/03/03}{First public release}
 %
 % \begin{abstract}
 %   The \textsf{luacas-random} package extends the \textsf{luacas}
@@ -61,7 +139,7 @@
 % The \textsf{luacas-random} package extends the \textsf{luacas}
 % computer algebra system with pseudo-random number generation.
 % It adds a |random| method to the |Integer| class.
-% The package requires \LuaLaTeX.
+% The package requires \hologo{LuaLaTeX}.
 %
 % \section{Usage}
 %
@@ -82,6 +160,7 @@
 % in the range $[x, y]$.  Called with a single argument |x|, it returns
 % a random |Integer| in the range $[1, x]$.
 %
+%    \begin{macrocode}
 %<*lua>
 -- luacas-randominteger.lua
 -- Extends the luacas Integer class with random number generation.
@@ -100,17 +179,17 @@ function Integer.random(x,y)
     end
 end
 %</lua>
+%    \end{macrocode}
 %
 % \subsection{\LaTeX{} package: \texttt{luacas-random.sty}}
 %
 % Loads \textsf{luacas} and the Lua module.  No \LaTeX{} commands are
 % defined; random integers are used directly in Lua code.
 %
+%    \begin{macrocode}
 %<*package>
-\NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{luacas-random}
-  [2026/03/03 v0.1 Random features for luacas]
-
 \RequirePackage{luacas}
-\directlua{require("luacas-randominteger")}
+\directlua{require("luacas-random")}
 %</package>
+%    \end{macrocode}
+% \Finale
