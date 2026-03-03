@@ -17,6 +17,9 @@ installfiles = {"*.sty", "*.lua"}
 -- Typeset the documentation from the dtx
 typesetfiles = {"*.dtx"}
 
+-- Install in the lualatex root directory
+tdsroot = "lualatex"
+
 -- print if the debug options is set
 function print_debug(s)
     if options['debug'] then
