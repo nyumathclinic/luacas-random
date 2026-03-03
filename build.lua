@@ -16,6 +16,7 @@ installfiles = {"*.sty", "*.lua"}
 
 -- Typeset the documentation from the dtx
 typesetfiles = {"*.dtx"}
+typesetexe = "lualatex"
 
 -- Tag source files
 tagfiles = {"*.dtx", "*.lua"}
