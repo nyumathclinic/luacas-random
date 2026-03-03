@@ -33,7 +33,7 @@
 \generate{\file{luacas-random.sty}{\from{luacas-random.dtx}{package}}}
 
 \usedir{scripts/luacas-random}
-\generate{\file{luacas-random.lua}{\from{luacas-random.dtx}{lua}}}
+\generate{\file{luacas-randominteger.lua}{\from{luacas-random.dtx}{lua}}}
 
 \endbatchfile
 %</installer>
@@ -50,17 +50,18 @@
 %
 % \begin{abstract}
 %   The \textsf{luacas-random} package extends the \textsf{luacas}
-%   computer algebra system with pseudo-random number generation
-%   capabilities for use in \LuaLaTeX{} documents.
+%   computer algebra system with pseudo-random number generation by
+%   adding a |random| method to the |Integer| class.
 % \end{abstract}
 %
 % \tableofcontents
 %
 % \section{Introduction}
 %
-% The \textsf{luacas-random} package provides \LaTeX{} commands for
-% generating random mathematical objects through \textsf{luacas}, a
-% Lua-based computer algebra system.  The package requires \LuaLaTeX.
+% The \textsf{luacas-random} package extends the \textsf{luacas}
+% computer algebra system with pseudo-random number generation.
+% It adds a |random| method to the |Integer| class.
+% The package requires \LuaLaTeX.
 %
 % \section{Usage}
 %
@@ -69,61 +70,47 @@
 %   \usepackage{luacas-random}
 % \end{verbatim}
 %
-% \DescribeMacro{\randint}
-% |\randint|\marg{low}\marg{high} typesets a pseudo-random integer
-% drawn uniformly from the closed interval $[\meta{low},\meta{high}]$.
+% The package provides no additional \LaTeX{} commands.  Random integers
+% are available in Lua code via |Integer.random|.
 %
 % \section{Implementation}
 %
-% \subsection{Lua module: \texttt{luacas-random.lua}}
+% \subsection{Lua module: \texttt{luacas-randominteger.lua}}
 %
-% The Lua module provides the random-generation logic that the
-% \LaTeX{} package calls via |\luadirect|.
+% Extends the \textsf{luacas} |Integer| class with a |random| method.
+% Called with two arguments |x| and |y|, it returns a random |Integer|
+% in the range $[x, y]$.  Called with a single argument |x|, it returns
+% a random |Integer| in the range $[1, x]$.
 %
 %<*lua>
--- luacas-random.lua
--- Lua module: pseudo-random features for luacas
+-- luacas-randominteger.lua
+-- Extends the luacas Integer class with random number generation.
 
-local random = {}
-
---- Seed the pseudo-random number generator.
--- @param seed  optional integer seed; defaults to os.time()
-function random.seed(seed)
-    math.randomseed(seed or os.time())
+--- Returns a random Integer.
+-- With two arguments returns a random Integer in [x, y].
+-- With one argument returns a random Integer in [1, x].
+-- @param x  Integer lower bound (or upper bound when y is nil)
+-- @param y  Integer upper bound (optional)
+-- @return   Integer
+function Integer.random(x,y)
+    if y ~= nil then
+        return Integer(math.random(x:asnumber(), y:asnumber()))
+    else
+        return Integer(math.random(x:asnumber()))
+    end
 end
-
---- Return a pseudo-random integer in the closed interval [low, high].
--- @param low   integer lower bound
--- @param high  integer upper bound
--- @return      integer
-function random.randint(low, high)
-    return math.random(low, high)
-end
-
-return random
 %</lua>
 %
 % \subsection{\LaTeX{} package: \texttt{luacas-random.sty}}
 %
-% The \LaTeX{} package loads the Lua module and exposes user commands.
+% Loads \textsf{luacas} and the Lua module.  No \LaTeX{} commands are
+% defined; random integers are used directly in Lua code.
 %
 %<*package>
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{luacas-random}
   [2026/03/03 v0.1 Random features for luacas]
 
-\RequirePackage{iftex}
-\ifluatex\else
-  \PackageError{luacas-random}{Not running under LuaLaTeX}
-    {This package requires LuaLaTeX.  Please compile with lualatex.}%
-  \stop
-\fi
-
-\RequirePackage{luacode}
-
-\luadirect{luacasrandom = require("luacas-random")}
-
-\newcommand{\randint}[2]{%
-  \luadirect{tex.sprint(luacasrandom.randint(#1, #2))}%
-}
+\RequirePackage{luacas}
+\directlua{require("luacas-randominteger")}
 %</package>
