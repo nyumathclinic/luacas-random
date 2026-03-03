@@ -1,5 +1,5 @@
 module = "luacas-random"
-version = "0.1"
+version = "0.1a"
 date = "2026-03-03"
 
 -- Source files for the module
@@ -16,6 +16,9 @@ installfiles = {"*.sty", "*.lua"}
 
 -- Typeset the documentation from the dtx
 typesetfiles = {"*.dtx"}
+
+-- Tag source files
+tagfiles = {"*.dtx", "*.lua"}
 
 -- Install in the lualatex root directory
 tdsroot = "lualatex"
