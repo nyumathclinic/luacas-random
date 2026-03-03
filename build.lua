@@ -17,6 +17,13 @@ installfiles = {"*.sty", "*.lua"}
 -- Typeset the documentation from the dtx
 typesetfiles = {"*.dtx"}
 
+-- print if the debug options is set
+function print_debug(s)
+    if options['debug'] then
+        print(s)
+    end
+end
+
 -- capture the output from a shell command
 -- Thanks Norman Ramsey https://stackoverflow.com/a/326715/297797
 -- there is also the shell() function from l3build-upload.lua
@@ -142,3 +149,5 @@ function tag_hook(version,tagdate)
     os.execute("git commit -m \"Log changes for version " .. version .. "\"")
     return os.execute("git tag -a -m \"Tag version " .. tagname .. "\" " .. tagname)
 end
+
+next_version = next_version_latex
