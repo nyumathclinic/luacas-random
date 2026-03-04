@@ -99,6 +99,17 @@ and the derived files           luacas-random.ins,
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage{hologo}
+\usepackage{dtxdescribe}
+\usepackage{showexpl}
+\lstset{language=TeX,
+  basicstyle=\ttfamily\small,
+  commentstyle=\itshape\ttfamily\small,
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  breakautoindent=true,
+  captionpos=t
+}
 \usepackage{\jobname}
 \EnableCrossrefs
 \CodelineIndex
@@ -140,34 +151,67 @@ and the derived files           luacas-random.ins,
 % The \textsf{luacas-random} package extends the \textsf{luacas}
 % computer algebra system with pseudo-random number generation.
 % It adds a |random| method to the |Integer| class.
-% The package requires \hologo{LuaLaTeX}.
+% 
 %
 % \section{Usage}
+% 
+% You need to use the \prog{luatex} engine instead of \prog{pdftex} to compile
+% your documents. There are many other good reasons to make this switch.
+% One side benefit is that you can use OpenType and TrueType fonts.
+%
+% If you typeset your \filenm{.tex} files on the command line, you just type
+% \prog{lualatex} instead of \prog{latex} or \prog{pdflatex}. If you use
+% some kind of GUI editor with \hologo{LaTeX} features, search its documentation
+% for ``engine'' and you will probably find the option to configure it.
+
 %
 % Load the package in your preamble:
-% \begin{verbatim}
-%   \usepackage{luacas-random}
-% \end{verbatim}
+% \iffalse
+%<*example>
+% \fi
+\begin{verbatim}
+  \usepackage{luacas}
+  \usepackage{luacas-random}
+\end{verbatim}
+% \iffalse
+%</example>
+% \fi
+% 
+% Loading \pkg{luacas-random} will load \pkg{luacas} if it's not already
+% loaded, but explicit is better than implicit.
 %
 % The package provides no additional \LaTeX{} commands.  Random integers
 % are available in Lua code via |Integer.random|.
 % 
 % For example:
-% \begin{verbatim}
-%   \begin{CAS}
-%     a = Integer.random(10)
-%     b = Integer.random(10,99)
-%   \end{CAS}
-%   Here is a random number between 1 and 10: \print{a}.
-%   Here is a random number between 10 and 99: \print{b}.
-% \end{verbatim}
-% The result of this code is: 
-% \begin{CAS}
-%   a = Integer.random(10)
-%   b = Integer.random(10,99)
-% \end{CAS}
-% Here is a random number between 1 and 10: \print{a}.
-% Here is a random number between 10 and 99: \print{b}.
+% \iffalse
+%<*example>
+% \fi
+\begin{LTXexample}[pos=r]
+  \begin{CAS}
+    a = Integer.random(10)
+    b = Integer.random(10,99)
+  \end{CAS}
+Here is a random number between 1 and 10: \print{a}.
+Here is a random number between 10 and 99: \print{b}.
+\end{LTXexample}
+% \iffalse
+%</example>
+% \fi
+% 
+% \subsection{Need for this package}
+% 
+% The \env{CAS} environment parses its contents before feeding them
+% to \cmd{\directlua}. One result of this parsing is that any strings that
+% look like integers are blessed into \pkg{luacas} \progcode{Integer} objects.
+% So a line like \progcode{a = math.random(10)} causes an error, because 
+% \progcode{math.random} doesn't know how to handle an \progcode{Integer}.
+% 
+% One way to avoid this is to evaluate \progcode{a = Integer(math.random(10))}
+% in a \cmd{\directlua} argument, followed by a \env{CAS}
+% environment with the rest of the code. Another is to write a method
+% that accepts and returns \pkg{luacas} \progcode{Integer} objects, which is what this
+% package does.
 %
 % \section{Implementation}
 %
