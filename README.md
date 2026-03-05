@@ -1,8 +1,15 @@
 # luacas-random
 
-A [luacas](https://github.com/cochraef/LuaCAS) extension that adds
-pseudo-random mathematical object generation for use in
-[LuaLaTeX](https://www.luatex.org/) documents.
+The `luacas-random` package extends the [luacas](https://github.com/cochraef/LuaCAS)
+computer algebra system with pseudo-random number generation by
+adding a `random` method to the `Integer` class.
+
+## Introduction
+
+The `luacas-random` package extends the `luacas`
+computer algebra system with pseudo-random number generation.
+It adds a `random` method to the `Integer` class.
+The package requires LuaLaTeX.
 
 ## Requirements
 
@@ -27,12 +34,14 @@ l3build doc
 
 ## Usage
 
+Load the package in your preamble:
+
 ```latex
 \usepackage{luacas-random}
-
-% Typeset a random integer between 1 and 10:
-\randint{1}{10}
 ```
+
+The package provides no additional LaTeX commands. Random integers
+are available in Lua code via `Integer.random`.
 
 ## License
 
