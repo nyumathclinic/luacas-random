@@ -1,5 +1,5 @@
 module = "luacas-random"
-version = "0.2"
+version = "0.3"
 date = "2026-03-03"
 
 -- Source files for the module
