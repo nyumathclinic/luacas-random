@@ -137,6 +137,7 @@ and the derived files           luacas-random.ins,
 %\maketitle
 %
 %\changes{v0.1}{2026/03/03}{First public release}
+%\changes{unreleased}{2026/04/23}{Add increment parameter}
 %
 % \begin{abstract}
 %   The \textsf{luacas-random} package extends the \textsf{luacas}
@@ -191,9 +192,11 @@ and the derived files           luacas-random.ins,
   \begin{CAS}
     a = Integer.random(10)
     b = Integer.random(10,99)
+    c = Integer.random(10,99,5)
   \end{CAS}
 Here is a random number between 1 and 10: \print{a}.
 Here is a random number between 10 and 99: \print{b}.
+Here is a random number congruent to 10 mod 5 between 10 and 99: \print{c}.
 \end{LTXexample}
 % \iffalse
 %</example>
@@ -218,21 +221,41 @@ Here is a random number between 10 and 99: \print{b}.
 % \subsection{Lua module}
 %
 % Extends the \textsf{luacas} |Integer| class with a |random| method.
-% Called with two arguments |x| and |y|, it returns a random |Integer|
-% in the range $[x, y]$.  Called with a single argument |x|, it returns
-% a random |Integer| in the range $[1, x]$.
+% Called with three arguments |x|, |y|, and |z|, it returns a random
+% |Integer| of the form $x + kz$ in the range $[x, y]$. Called with two
+% arguments |x| and |y|, it returns a random |Integer| in the range
+% $[x, y]$. Called with a single argument |x|, it returns a random
+% |Integer| in the range $[1, x]$.
 %
 %    \begin{macrocode}
 %<*lua>
 --- Returns a random Integer.
+-- With three arguments returns a random Integer of the form x + k*z
+-- in [x, y], where k is a nonnegative Integer.
 -- With two arguments returns a random Integer in [x, y].
 -- With one argument returns a random Integer in [1, x].
 -- @param x  Integer lower bound (or upper bound when y is nil)
 -- @param y  Integer upper bound (optional)
+-- @param z  Integer increment (optional; positive when provided)
 -- @return   Integer
-function Integer.random(x,y)
-    if y ~= nil then
-        return Integer(math.random(x:asnumber(), y:asnumber()))
+function Integer.random(x,y,z)
+  if y ~= nil and z ~= nil then
+    local xnum = x:asnumber()
+    local ynum = y:asnumber()
+    local znum = z:asnumber()
+
+    if znum <= 0 then
+      error("Integer.random(x,y,z): z must be positive")
+    end
+
+    local kmax = math.floor((ynum - xnum)/znum)
+    if kmax < 0 then
+      error("Integer.random(x,y,z): empty range")
+    end
+
+    return Integer(xnum + math.random(0, kmax)*znum)
+  elseif y ~= nil then
+    return Integer(math.random(x:asnumber(), y:asnumber()))
     else
         return Integer(math.random(x:asnumber()))
     end

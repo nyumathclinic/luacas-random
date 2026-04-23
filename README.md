@@ -32,6 +32,12 @@ Typeset the documentation:
 l3build doc
 ```
 
+Install:
+
+```shell
+l3build install --full
+```
+
 ## Usage
 
 Load the package in your preamble:
@@ -40,8 +46,24 @@ Load the package in your preamble:
 \usepackage{luacas-random}
 ```
 
-The package provides no additional LaTeX commands. Random integers
-are available in Lua code via `Integer.random`.
+The package provides no additional LaTeX commands. Random integers are available in Lua code via `Integer.random`.
+
+- `Integer.random(x)` returns a random integer in `[1,x]`.
+- `Integer.random(x,y)` returns a random integer in `[x,y]`.
+- `Integer.random(x,y,z)` returns a random integer of the form `x + k*z` in `[x,y]`, where `k` is a nonnegative integer.
+
+For example:
+
+```latex
+\begin{CAS}
+  a = Integer.random(10)
+  b = Integer.random(10,99)
+  c = Integer.random(10,99,5)
+\end{CAS}
+Here is a number between 1 and 10: \print{a}.
+Here is a random two-digit number: \print{b}.
+Here is a random number congruent to 10 mod 5 between 10 and 99: \print{c}.
+```
 
 ## License
 

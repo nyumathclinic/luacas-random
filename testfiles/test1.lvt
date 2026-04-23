@@ -5,9 +5,11 @@
 \begin{document}
 \begin{CAS}
  a = Integer.random(10)
+ b = Integer.random(10,99,5)
 \end{CAS}
 \START
 \directlua{texio.write_nl("log", "a=" .. tostring(a:asnumber()))}
+\directlua{texio.write_nl("log", "b=" .. tostring(b:asnumber()))}
 \END
 \end{document}
  
